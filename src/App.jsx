@@ -9,17 +9,9 @@ import VerProducto from './pages/VerProducto'
 
 export default function App() {
   return (
-    <>
-      <Barra />
-      <div className="container py-4">
-        <Routes>
-          <Route path="/" element={<Productos />} />
-          <Route path="/crear" element={<CrearProducto />} />
-          <Route path="/editar/:id" element={<EditarProducto />} />
-          <Route path="/ver/:id" element={<VerProducto />} />
-        </Routes>
-      </div>
-      <Pie />
-    </>
+    <div style={{ textAlign: "center", marginTop: "50px" }}>
+      <h1>🐶 Bienvenido a la tienda MAXCA 🐱</h1>
+      <p>Tu tienda en línea de confianza para mascotas.</p>
+    </div>
   )
 }
