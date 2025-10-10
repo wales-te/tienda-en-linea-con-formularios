@@ -1,19 +1,42 @@
-import React, { useState, useEffect } from 'react';
-import { verProducto, actualizarProducto } from '../api/productosApi';
-import { useParams, useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { listarProductos, obtenerProducto, actualizarProducto } from "../api/productosApi";
 
 export default function EditarProducto() {
-  const { id } = useParams();
-  const [form, setForm] = useState({ nombre: '', precio: '', categoria: '', descripcion: '', imagen: '' });
+  const { id: idParam } = useParams();
+  const [search] = useSearchParams();
+  const idQuery = search.get("id");
+  const id = idParam || idQuery;
+
   const navigate = useNavigate();
+  const [form, setForm] = useState({
+    nombre: "",
+    precio: "",
+    descripcion: "",
+    imagen: "",
+  });
+  const [todos, setTodos] = useState([]);
+  const [cargando, setCargando] = useState(Boolean(id));
 
   useEffect(() => {
-    cargarProducto();
-  }, []);
+    (async () => {
+      if (!id) {
+        // Sin id: listar para escoger
+        const data = await listarProductos();
+        setTodos(data);
+      } else {
+        setCargando(true);
+        const data = await obtenerProducto(id);
+        setForm(data);
+        setCargando(false);
+      }
+    })();
+  }, [id]);
 
-  async function cargarProducto() {
-    const datos = await verProducto(id);
-    setForm(datos);
+  async function cargarParaEditar(e) {
+    const seleccionado = e.target.value;
+    if (!seleccionado) return;
+    navigate(`/editar/${seleccionado}`);
   }
 
   function cambia(e) {
@@ -23,62 +46,90 @@ export default function EditarProducto() {
   async function guardar(e) {
     e.preventDefault();
     await actualizarProducto(id, form);
-    navigate('/');
+    navigate("/consultar");
   }
 
+  if (!id) {
+    return (
+      <div className="container" style={{ maxWidth: 720 }}>
+        <h2 className="mb-3">Editar producto</h2>
+        <div className="card p-3 shadow-sm">
+          <label className="form-label">Selecciona un producto</label>
+          <select className="form-select" onChange={cargarParaEditar} defaultValue="">
+            <option value="" disabled>— Elegir —</option>
+            {todos.map((p) => (
+              <option key={p.id} value={p.id}>
+                {p.nombre} — L {p.precio}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+    );
+  }
+
+  if (cargando) return <div className="container py-3">Cargando…</div>;
+
   return (
-    <div>
-      <h2>Editar Producto</h2>
-      <form onSubmit={guardar}>
-        <input
-          name="nombre"
-          value={form.nombre}
-          onChange={cambia}
-          className="form-control mb-2"
-          placeholder="Nombre"
-          required
-        />
-        <input
-          name="precio"
-          value={form.precio}
-          onChange={cambia}
-          type="number"
-          className="form-control mb-2"
-          placeholder="Precio en Lempiras"
-          required
-        />
-        <input
-          name="categoria"
-          value={form.categoria}
-          onChange={cambia}
-          className="form-control mb-2"
-          placeholder="Categoría"
-          required
-        />
-        <input
-          name="descripcion"
-          value={form.descripcion}
-          onChange={cambia}
-          className="form-control mb-2"
-          placeholder="Descripción"
-        />
-        <input
-          name="imagen"
-          value={form.imagen}
-          onChange={cambia}
-          className="form-control mb-2"
-          placeholder="URL de la imagen"
-        />
-        <button type="submit" className="btn btn-success">
-          Guardar Cambios
-        </button>
-        <button
-          type="button"
-          className="btn btn-secondary ms-2"
-          onClick={() => navigate('/')}
-        >
-          Cancelar
-        </button>
+    <div className="container" style={{ maxWidth: 720 }}>
+      <h2 className="mb-3">Editar producto</h2>
+      <form onSubmit={guardar} className="card p-3 shadow-sm">
+        <div className="mb-3">
+          <label className="form-label">Nombre</label>
+          <input
+            name="nombre"
+            value={form.nombre}
+            onChange={cambia}
+            className="form-control"
+            required
+          />
+        </div>
+
+        <div className="mb-3">
+          <label className="form-label">Precio (L)</label>
+          <input
+            name="precio"
+            type="number"
+            value={form.precio}
+            onChange={cambia}
+            className="form-control"
+            min="0"
+            required
+          />
+        </div>
+
+        <div className="mb-3">
+          <label className="form-label">Descripción</label>
+          <textarea
+            name="descripcion"
+            value={form.descripcion}
+            onChange={cambia}
+            className="form-control"
+            rows={3}
+          />
+        </div>
+
+        <div className="mb-3">
+          <label className="form-label">URL de la imagen</label>
+          <input
+            name="imagen"
+            value={form.imagen}
+            onChange={cambia}
+            className="form-control"
+            placeholder="https://…"
+          />
+        </div>
+
+        <div className="d-flex gap-2">
+          <button className="btn btn-success">Guardar cambios</button>
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={() => navigate("/consultar")}
+          >
+            Cancelar
+          </button>
+        </div>
       </form>
     </div>
   );
