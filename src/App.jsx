@@ -1,8 +1,10 @@
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom"
-import ConsultarProductos from "./pages/ConsultarProductos"
-import CrearProducto from "./pages/CrearProducto"
-import EditarProducto from "./pages/EditarProducto"
-import EliminarProducto from "./pages/EliminarProducto"
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import React, { Suspense, lazy } from "react";
+
+const ConsultarProductos = lazy(() => import("./pages/ConsultarProductos"));
+const CrearProducto      = lazy(() => import("./pages/CrearProducto"));
+const EditarProducto     = lazy(() => import("./pages/EditarProducto"));
+const EliminarProducto   = lazy(() => import("./pages/EliminarProducto"));
 
 export default function App() {
   return (
@@ -25,18 +27,22 @@ export default function App() {
       </nav>
 
       <div className="container py-4">
-        <Routes>
-          <Route path="/" element={<div className="text-center">
-            <h1 className="mb-3">Tienda MAXCA</h1>
-            <p>CRUD completo: consulta, agrega, edita y elimina productos.</p>
-          </div>} />
-          <Route path="/consultar" element={<ConsultarProductos />} />
-          <Route path="/crear" element={<CrearProducto />} />
-          <Route path="/editar" element={<EditarProducto />} />
-          <Route path="/editar/:id" element={<EditarProducto />} />
-          <Route path="/eliminar" element={<EliminarProducto />} />
-        </Routes>
+        <Suspense fallback={<p>Cargando…</p>}>
+          <Routes>
+            <Route path="/" element={
+              <div className="text-center">
+                <h1 className="mb-3">Tienda MAXCA</h1>
+                <p>CRUD completo: consulta, agrega, edita y elimina productos.</p>
+              </div>
+            } />
+            <Route path="/consultar" element={<ConsultarProductos />} />
+            <Route path="/crear" element={<CrearProducto />} />
+            <Route path="/editar" element={<EditarProducto />} />
+            <Route path="/editar/:id" element={<EditarProducto />} />
+            <Route path="/eliminar" element={<EliminarProducto />} />
+          </Routes>
+        </Suspense>
       </div>
     </Router>
-  )
+  );
 }
