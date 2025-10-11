@@ -29,61 +29,49 @@ export default function ConsultarProductos() {
               <th>Nombre</th>
               <th>Precio (L)</th>
               <th>Descripción</th>
-              <th style={{ width: 140 }}>Imagen</th>
               <th style={{ width: 220 }}>Acciones</th>
             </tr>
           </thead>
           <tbody>
-            {productos.length === 0 && (
-              <tr>
-                <td colSpan="5" className="text-center py-4">
-                  No hay productos aún. Crea el primero con “Agregar producto”.
-                </td>
-              </tr>
-            )}
+  {productos.length === 0 && (
+    <tr>
+      <td colSpan="4" className="text-center py-4">
+        No hay productos aún. Crea el primero con “Agregar producto”.
+      </td>
+    </tr>
+  )}
 
-            {productos.map((p) => (
-              <tr key={p.id}>
-                <td className="fw-semibold">{p.nombre}</td>
-                <td>L {p.precio}</td>
-                <td>{p.descripcion}</td>
-                <td>
-                  {p.imagen ? (
-                    <img
-                      src={p.imagen}
-                      alt={p.nombre}
-                      className="img-fluid rounded"
-                      style={{ maxWidth: 120 }}
-                    />
-                  ) : (
-                    <span className="text-muted">Sin imagen</span>
-                  )}
-                </td>
-                <td>
-                  <div className="d-flex gap-2 flex-wrap">
-                    <button
-                      className="btn btn-outline-info btn-sm"
-                      onClick={() => navigate(`/ver/${p.id}`)}
-                    >
-                      Ver
-                    </button>
-                    <button
-                      className="btn btn-warning btn-sm"
-                      onClick={() => navigate(`/editar/${p.id}`)}
-                    >
-                      Editar
-                    </button>
-                    <button
-                      className="btn btn-danger btn-sm"
-                      onClick={() => navigate(`/eliminar?id=${p.id}`)}
-                    >
-                      Eliminar
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
+  {productos.map((p) => (
+    <tr key={p.id}>
+      <td className="fw-semibold">{p.nombre}</td>
+      <td>L {p.precio}</td>
+      <td>{p.descripcion}</td>
+      <td>
+        <div className="d-flex gap-2 flex-wrap">
+          <button
+            className="btn btn-outline-info btn-sm"
+            onClick={() => navigate(`/ver/${p.id}`)}
+          >
+            Ver
+          </button>
+          <button
+            className="btn btn-warning btn-sm"
+            onClick={() => navigate(`/editar/${p.id}`)}
+          >
+            Editar
+          </button>
+          <button
+            className="btn btn-danger btn-sm"
+            onClick={() => navigate(`/eliminar?id=${p.id}`)}
+          >
+            Eliminar
+          </button>
+        </div>
+      </td>
+    </tr>
+  ))}
+</tbody>
+
         </table>
       </div>
     </div>

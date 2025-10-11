@@ -84,18 +84,7 @@ export default function EliminarProducto() {
                 <td className="fw-semibold">{p.nombre}</td>
                 <td>L {p.precio}</td>
                 <td>{p.descripcion}</td>
-                <td>
-                  {p.imagen ? (
-                    <img
-                      src={p.imagen}
-                      alt={p.nombre}
-                      className="img-fluid rounded"
-                      style={{ maxWidth: 120 }}
-                    />
-                  ) : (
-                    <span className="text-muted">Sin imagen</span>
-                  )}
-                </td>
+
                 <td>
                   <button className="btn btn-danger btn-sm" onClick={() => eliminar(p.id)}>
                     Eliminar

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { listarProductos, borrarProducto } from "../api/productosApi";
 import { useNavigate } from "react-router-dom";
 
+
 export default function Productos() {
   const [productos, setProductos] = useState([]);
   const navigate = useNavigate();
@@ -53,9 +54,9 @@ export default function Productos() {
               <td>{producto.descripcion}</td> {/* Solo si existe */}
               <td>
                 <img
-                  src={producto.avatar} // MockAPI usa "avatar"
-                  alt={producto.name}
-                  style={{ width: "100px" }}
+                  src={getImg(producto.imagen)}
+  alt={producto.nombre}
+  style={{ width: "100px" }}
                 />
               </td>
               <td>

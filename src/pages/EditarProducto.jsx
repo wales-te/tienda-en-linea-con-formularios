@@ -109,17 +109,6 @@ export default function EditarProducto() {
           />
         </div>
 
-        <div className="mb-3">
-          <label className="form-label">URL de la imagen</label>
-          <input
-            name="imagen"
-            value={form.imagen}
-            onChange={cambia}
-            className="form-control"
-            placeholder="https://…"
-          />
-        </div>
-
         <div className="d-flex gap-2">
           <button className="btn btn-success">Guardar cambios</button>
           <button

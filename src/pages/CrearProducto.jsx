@@ -6,8 +6,7 @@ export default function CrearProducto() {
   const [form, setForm] = useState({
     nombre: "",
     precio: "",
-    descripcion: "",
-    imagen: "",
+    descripcion: ""
   });
   const navigate = useNavigate();
 
@@ -46,8 +45,8 @@ export default function CrearProducto() {
             onChange={cambia}
             className="form-control"
             placeholder="Ej. 450"
-            required
             min="0"
+            required
           />
         </div>
 
@@ -60,17 +59,6 @@ export default function CrearProducto() {
             className="form-control"
             placeholder="Ej. Tela suave, ajuste regular"
             rows={3}
-          />
-        </div>
-
-        <div className="mb-3">
-          <label className="form-label">URL de la imagen</label>
-          <input
-            name="imagen"
-            value={form.imagen}
-            onChange={cambia}
-            className="form-control"
-            placeholder="https://…"
           />
         </div>
 
